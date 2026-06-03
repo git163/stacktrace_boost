@@ -15,16 +15,27 @@ set(SRCS
     StackTraceUtil.cpp
 )
 
-add_library(StacktraceBoost STATIC ${SRCS})
+# 构建为动态库（so/dylib），方便分发给外部用户
+add_library(StacktraceBoost SHARED ${SRCS})
+
+# 符号可见性：默认隐藏，仅导出标记为 STACKTRACE_BOOST_API 的符号
+target_compile_options(StacktraceBoost PRIVATE -fvisibility=hidden)
+target_compile_definitions(StacktraceBoost PRIVATE STACKTRACE_BOOST_EXPORTS)
 
 target_include_directories(StacktraceBoost
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
         ${BOOST_INCLUDES}
-        ${NLOHMANN_JSON_INCLUDE}
 )
 
 target_link_libraries(StacktraceBoost
     PUBLIC
         ${CMAKE_DL_LIBS}
+)
+
+# 设置动态库版本号
+set_target_properties(StacktraceBoost PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
 )

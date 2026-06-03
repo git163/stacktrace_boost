@@ -2,6 +2,7 @@
 
 #include "StackTraceUtil.h"
 
+#include <boost/stacktrace.hpp>
 #include <sstream>
 
 #ifdef __APPLE__

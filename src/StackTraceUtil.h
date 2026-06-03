@@ -4,18 +4,31 @@
 #ifndef STACKTRACEUTIL_H
 #define STACKTRACEUTIL_H
 
-#include <boost/stacktrace.hpp>
 #include <exception>
 #include <string>
 #include <vector>
+
+// 动态库符号导出宏
+#ifdef _WIN32
+    #ifdef STACKTRACE_BOOST_EXPORTS
+        #define STACKTRACE_BOOST_API __declspec(dllexport)
+    #else
+        #define STACKTRACE_BOOST_API __declspec(dllimport)
+    #endif
+#else
+    #define STACKTRACE_BOOST_API __attribute__((visibility("default")))
+#endif
 
 /**
  * @brief 堆栈跟踪工具类
  *
  * 封装 Boost.Stacktrace，提供获取当前调用堆栈的便捷接口。
  * 同时提供携带堆栈信息的异常基类，方便在异常抛出时记录现场。
+ *
+ * 注意：公共接口仅使用标准类型（std::string、std::vector），
+ * 调用方无需包含 Boost 头文件。
  */
-class StackTraceUtil
+class STACKTRACE_BOOST_API StackTraceUtil
 {
 public:
     /**
@@ -51,7 +64,7 @@ private:
  * }
  * @endcode
  */
-class TracedException : public std::exception
+class STACKTRACE_BOOST_API TracedException : public std::exception
 {
 public:
     explicit TracedException(const std::string& strMessage);
