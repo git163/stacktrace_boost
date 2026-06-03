@@ -88,6 +88,11 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# 保留调试符号，确保堆栈跟踪能解析文件名和行号
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    add_compile_options(-g)
+endif()
+
 # ------------------------------------------------------------------------------
 # 子目录
 # ------------------------------------------------------------------------------
