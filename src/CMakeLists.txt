@@ -13,6 +13,7 @@ set(BOOST_INCLUDES
 
 set(SRCS
     StackTraceUtil.cpp
+    CrashHandler.cpp
 )
 
 # 构建为动态库（so/dylib），方便分发给外部用户
